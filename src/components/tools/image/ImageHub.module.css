@@ -1,0 +1,102 @@
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+}
+
+.hero {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 4px solid #f1f5f9;
+    text-align: center;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #64748b;
+}
+
+/* Super Sections */
+.superSection {
+    margin-bottom: 2.5rem;
+}
+
+.superSectionTitle {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #e11d48;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Sitemap Grid Layout within Super Section */
+.sitemapGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.categoryBlock {
+    margin-bottom: 1rem;
+    width: 100%;
+    text-align: center;
+}
+
+.categoryTitle {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.linkList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    column-count: 2;
+    /* User requested "2 line" (2 columns) */
+    column-gap: 4rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .linkList {
+        column-count: 1;
+    }
+}
+
+.linkList li {
+    margin-bottom: 0.4rem;
+}
+
+.textLink {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    transition: all 0.2s;
+    display: flex;
+    /* Changed to flex to allow icon + text alignment */
+    align-items: center;
+    gap: 0.5rem;
+    white-space: normal;
+    /* Allow wrapping if needed, or keeping it single line */
+}
+
+.textLink:hover {
+    color: #0284c7;
+    text-decoration: none;
+    transform: translateX(4px);
+}

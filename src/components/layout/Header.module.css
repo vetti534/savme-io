@@ -1,0 +1,133 @@
+.header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* Standard minimalist shadow */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    height: 70px;
+    /* Standard fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.boxContainer {
+    /* Pure layout container for alignment */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    /* Standard padding */
+    max-width: 100%;
+    /* Default mobile */
+}
+
+/* Strictly enforce the same max-width as global container */
+@media (min-width: 1000px) {
+    .boxContainer {
+        max-width: 960px;
+        /* Aligns with content */
+        padding: 0 0.5rem;
+        /* Slight padding for safety */
+    }
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    font-size: 1.4rem;
+    /* Tighten for 960px fit */
+    font-weight: 800;
+    color: #333;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.5px;
+    margin-right: 0.5rem;
+    /* Reduce right margin if any */
+}
+
+.logo span {
+    color: #e53935;
+    /* iLovePDF Red */
+}
+
+.translatorWrapper {
+    /* Placeholder for translator wrapper styles */
+}
+
+.nav {
+    display: flex;
+    gap: 0.8rem;
+    /* Tighten gap significantly */
+    align-items: center;
+}
+
+.link {
+    font-size: 0.75rem;
+    /* Smaller, cleaner text */
+    font-weight: 700;
+    color: #444;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.link:hover {
+    color: #e53935;
+}
+
+.right {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    /* Tighten gap */
+}
+
+.loginBtn {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.loginBtn:hover {
+    color: #e53935;
+}
+
+.signupBtn {
+    background-color: #e53935;
+    color: white;
+    padding: 0.4rem 1rem;
+    /* Smaller button */
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signupBtn:hover {
+    background-color: #d32f2f;
+}
+
+@media (max-width: 1024px) {
+    .nav {
+        display: none;
+        /* Hide nav on smaller screens for now */
+    }
+}

@@ -1,0 +1,44 @@
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: var(--card);
+    padding: 2rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.result {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    background: var(--muted);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+}
+
+.resultItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.text {
+    color: var(--muted-foreground);
+    font-size: 0.875rem;
+}

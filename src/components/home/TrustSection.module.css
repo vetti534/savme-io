@@ -1,0 +1,46 @@
+.section {
+    padding: 5rem 1rem;
+    background: #f9fafb;
+    text-align: center;
+}
+
+.heading {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: #2c3e50;
+}
+
+.grid {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    max-width: 200px;
+}
+
+.icon {
+    font-size: 2.5rem;
+    background: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    color: var(--primary);
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #444;
+}

@@ -1,0 +1,238 @@
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.regimeToggle {
+    background: #f1f5f9;
+    padding: 0.5rem;
+    border-radius: 12px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.regimeBtn {
+    border: none;
+    background: transparent;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.regimeBtn small {
+    font-size: 0.7rem;
+    font-weight: 400;
+    margin-top: 0.2rem;
+}
+
+.activeRegime {
+    border: none;
+    background: #fff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: default;
+    color: #e53935;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 700;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.activeRegime small {
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-top: 0.2rem;
+    color: #e53935;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.inputs {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.inputs h3 {
+    margin-bottom: 1rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.5rem;
+}
+
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    background: #f9f9f9;
+}
+
+.inputWrapper input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    outline: none;
+}
+
+.inputWrapperDisabled {
+    display: flex;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    background: #f1f5f9;
+    color: #999;
+}
+
+.inputWrapperDisabled input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #999;
+}
+
+.disabledGroup {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.deductionSection {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.results {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    overflow: hidden;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.summaryBox {
+    padding: 1.5rem;
+    background: #fff;
+    text-align: center;
+}
+
+.chartContainer {
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.metricRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 0.5rem;
+}
+
+.breakdown {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.breakdown h4 {
+    margin-bottom: 1rem;
+    color: #555;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.breakdown ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.breakdown li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.cessRow {
+    border-top: 1px solid #ddd;
+    padding-top: 0.5rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.printBtn {
+    width: 100%;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    padding: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.printBtn:hover {
+    background: #1a252f;
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .deductionSection {
+        grid-template-columns: 1fr;
+    }
+}
