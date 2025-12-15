@@ -1,25 +1,91 @@
 import Link from 'next/link';
-import RecentTools from '@/components/home/RecentTools';
-import TrendingTools from '@/components/home/TrendingTools';
+import { tools } from '@/lib/tools';
 import styles from './page.module.css';
 
+// Manually selecting trending tools for now
+const TRENDING_SLUGS = [
+  'merge-pdf',
+  'emi-calculator',
+  'gst-calculator',
+  'image-resizer',
+  'sip-calculator',
+  'pdf-to-word'
+];
+
+export const metadata = {
+  title: 'SavMe.io - Free Online Tools for Everyone',
+  description: 'Complete directory of free online tools: PDF, Image, Calculators, Writing and more.',
+};
+
 export default function Home() {
+  const trendingTools = tools.filter(t => TRENDING_SLUGS.includes(t.slug));
+
+  // Group tools by Category -> SubCategory
+  const toolsByCategory = tools.reduce((acc, tool) => {
+    const cat = tool.category;
+    const subCat = tool.subCategory || 'General';
+
+    if (!acc[cat]) acc[cat] = {};
+    if (!acc[cat][subCat]) acc[cat][subCat] = [];
+
+    acc[cat][subCat].push(tool);
+    return acc;
+  }, {} as Record<string, Record<string, typeof tools>>);
+
+  const getCategoryName = (cat: string) => {
+    if (cat === 'pdf-tools') return 'PDF Tools';
+    if (cat === 'calculators') return 'Calculators';
+    if (cat === 'writing-tools') return 'Writing Tools';
+    if (cat === 'image-tools') return 'Image Tools';
+    return cat.replace('-', ' ').toUpperCase();
+  };
+
   return (
-    <div>
-      {/* 1. Simple Hero Section */}
+    <div className={styles.container}>
       <section className={styles.hero}>
-        <div className="container">
-          <h1 className={styles.heroTitle}>SavMe.io</h1>
-          <p className={styles.heroSubtitle}>
-            Professional online tools for everyone. Free, fast, and secure.
-          </p>
-          {/* Search Component should ideally be here if not in Header, but keeping simple for now */}
+        <h1 className={styles.title}>All Free Tools</h1>
+        <p className={styles.subtitle}>Fast, Secure & Free Tools for Everyone</p>
+      </section>
+
+      {/* Trending Section - Quick Access Grid */}
+      <section className={styles.trendingSection}>
+        <h2 className={styles.sectionHeader}>🔥 Trending Now</h2>
+        <div className={styles.trendingGrid}>
+          {trendingTools.map(tool => (
+            <Link key={tool.id} href={`/tools/${tool.slug}`} className={styles.trendingChip}>
+              <span className={styles.trendIcon}>{tool.icon}</span> {tool.name}
+            </Link>
+          ))}
         </div>
       </section>
 
-      {/* 2. Trending Tools Section (ONLY this as requested) */}
-      <TrendingTools />
+      <div className={styles.divider}></div>
 
+      {/* Sitemap Style Layout */}
+      <div className={styles.sitemapWrapper}>
+        {Object.entries(toolsByCategory).map(([catId, subCats]) => (
+          <div key={catId} className={styles.categoryBlock}>
+            <h2 className={styles.catTitle}>{getCategoryName(catId)}</h2>
+
+            <div className={styles.subCatGrid}>
+              {Object.entries(subCats).map(([subCatName, subCatTools]) => (
+                <div key={subCatName} className={styles.subCatColumn}>
+                  <h3 className={styles.subCatTitle}>{subCatName}</h3>
+                  <ul className={styles.linkList}>
+                    {subCatTools.map(tool => (
+                      <li key={tool.id}>
+                        <Link href={`/tools/${tool.slug}`} className={styles.textLink}>
+                          {tool.icon} {tool.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
