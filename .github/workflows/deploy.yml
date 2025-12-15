@@ -28,17 +28,8 @@ jobs:
       - name: 🔧 Copy PHP Proxy
         run: cp public/gemini-proxy.php out/gemini-proxy.php
 
-      - name: 📂 Sync files (FTP)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          port: 21
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./out/
-          server-dir: ./public_html/
-          protocol: ftps
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
+      - name: 🚀 Turbo Deploy (LFTP)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+          lftp -c "set ftp:ssl-allow no; active-mode; open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }}; mirror -R -v -P 10 --exclude-glob .git* --exclude-glob .github* ./out/ ./public_html/"
