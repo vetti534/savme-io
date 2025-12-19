@@ -1,0 +1,310 @@
+/* Main Container: Block Layout */
+.toolContainer {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Ad Slot Removed */
+.adSlotRight {
+    display: none;
+}
+
+/* Calculator Wrapper */
+.calculatorWrapper {
+    width: 100%;
+}
+
+/* Calculator Card */
+.calculatorCard {
+    background: #ffffff;
+    border: 1px solid #dfe1e5;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 2rem;
+}
+
+/* Calculation Row */
+.calcRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Fraction Input Group */
+.fractionGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    /* Increased gap */
+}
+
+/* Increased Integer Input Size */
+.integerInput {
+    width: 80px;
+    /* Increased from 60px */
+    height: 60px;
+    /* Increased from 50px */
+    font-size: 1.5rem;
+    /* Larger font */
+    text-align: center;
+    border: 1px solid #9aa0a6;
+    /* Darker border */
+    border-radius: 4px;
+    color: #000;
+    /* Force black text */
+    font-weight: 500;
+}
+
+.fractionPart {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+}
+
+/* Increased Fraction Input Size */
+.fractionInput {
+    width: 80px;
+    /* Increased from 60px */
+    height: 50px;
+    /* Increased from 40px */
+    font-size: 1.3rem;
+    /* Larger font */
+    text-align: center;
+    border: 1px solid #9aa0a6;
+    border-radius: 4px;
+    color: #000;
+}
+
+.fractionLine {
+    width: 100%;
+    height: 3px;
+    /* Thicker line */
+    background: #000;
+    /* Black line */
+}
+
+/* High Contrast Operator Selector */
+.operatorSelect {
+    font-size: 2rem;
+    /* Much larger */
+    padding: 0.5rem 1rem;
+    border: 2px solid #000;
+    /* Black border */
+    border-radius: 8px;
+    background: #f8f9fa;
+    cursor: pointer;
+    color: #000000;
+    /* Pure black text */
+    font-weight: bold;
+    appearance: none;
+    /* Remove default arrow to style cleaner if needed, but keeping simple */
+    text-align: center;
+}
+
+/* Actions */
+.buttonGroup {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btnCalculate {
+    background: #1a73e8;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btnCalculate:hover {
+    background: #1557b0;
+}
+
+.btnClear {
+    background: #ffffff;
+    color: #5f6368;
+    border: 1px solid #dadce0;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btnClear:hover {
+    background: #f8f9fa;
+}
+
+/* Result Section */
+.resultSection {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.resultTitle {
+    font-size: 0.9rem;
+    color: #5f6368;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.mainResult {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 1.5rem;
+    color: #202124;
+    font-weight: bold;
+    flex-wrap: wrap;
+    /* allow wrapping on small screens */
+}
+
+.equalsSign {
+    color: #5f6368;
+}
+
+.decimalValue {
+    color: #70757a;
+    font-weight: normal;
+    font-size: 1.2rem;
+}
+
+.stepsSection {
+    margin-top: 1.5rem;
+    border-top: 1px dashed #cbd5e1;
+    /* Dashed separator */
+    padding-top: 1rem;
+}
+
+.stepsHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.btnDownload {
+    background: #34a853;
+    /* Google Green */
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: background 0.2s;
+}
+
+.btnDownload:hover {
+    background: #2d8e47;
+}
+
+.stepsToggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #1a73e8;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color 0.2s;
+}
+
+.stepsToggle:hover {
+    color: #1557b0;
+    text-decoration: underline;
+}
+
+/* Add a pseudo-element for an arrow/icon if desired, or keep simple */
+.stepsToggle::before {
+    content: '💡';
+    /* Lightbulb icon for explicit "Explain" feel */
+    font-size: 1.2rem;
+}
+
+.stepsContent {
+    margin-top: 0.5rem;
+    font-family: 'Roboto Mono', 'Consolas', monospace;
+    /* Monospace for alignment */
+    font-size: 0.95rem;
+    background: #fff9c4;
+    /* Light yellow for "Note/Explanation" feel */
+    padding: 1rem;
+    border-radius: 6px;
+    border: 1px solid #fbc02d;
+    /* Yellow border */
+    white-space: pre-wrap;
+    line-height: 1.6;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #4a3b00;
+}
+
+/* SEO Content */
+.seoContent {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
+    color: #4b5563;
+    line-height: 1.6;
+}
+
+.seoContent h1 {
+    font-size: 1.8rem;
+    color: #202124;
+    margin-bottom: 1rem;
+}
+
+.seoContent h2 {
+    font-size: 1.4rem;
+    color: #202124;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.seoContent p {
+    margin-bottom: 1rem;
+}
+
+.faqItem {
+    margin-bottom: 1.5rem;
+}
+
+.faqItem h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #202124;
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .toolContainer {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+    }
+
+    .adSlotRight {
+        display: none !important;
+    }
+
+    .calcRow {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

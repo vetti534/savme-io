@@ -1,0 +1,354 @@
+/* GRID LAYOUT - Matches Age Calculator */
+.pageGrid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    /* Main content + 300px Ad Sidebar */
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+    .pageGrid {
+        grid-template-columns: 1fr;
+        /* Stack on tablet/mobile */
+    }
+
+    .rightColumn {
+        display: none;
+        /* Hide sidebar ads on small screens */
+    }
+}
+
+.mainColumn {
+    width: 100%;
+}
+
+.rightColumn {
+    min-height: 800px;
+}
+
+.stickyAd {
+    position: sticky;
+    top: 20px;
+}
+
+/* UI ELEMENTS */
+.loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #555;
+    background: #fdfdfd;
+    border-radius: 8px;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.tab {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    background: #f3f4f6;
+    color: #4b5563;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.activeTab {
+    background: #000;
+    color: white;
+    font-weight: 600;
+}
+
+.card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+    margin-bottom: 2rem;
+}
+
+.cardTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #111;
+}
+
+.icon {
+    color: #111;
+}
+
+.cardDesc {
+    color: #666;
+    font-size: 1.05rem;
+}
+
+/* INPUTS */
+.inputSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.inputGroup label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inputGroup input,
+.inputGroup select {
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.2s;
+    color: #000000 !important;
+    background: #ffffff !important;
+    width: 100%;
+    -webkit-text-fill-color: #000000 !important;
+    opacity: 1 !important;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+    border-color: #000;
+}
+
+.operationSelect {
+    flex: 0 0 120px;
+}
+
+/* Time Input Wrapper (HH : MM : SS) */
+.timeInputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.timeField {
+    flex: 1;
+    text-align: center;
+    color: #000000 !important;
+    background: #ffffff !important;
+    -webkit-text-fill-color: #000000 !important;
+    opacity: 1 !important;
+}
+
+.timeField::placeholder {
+    color: #9ca3af !important;
+    opacity: 1 !important;
+    -webkit-text-fill-color: #9ca3af !important;
+}
+
+/* Fix for Firefox/Chrome internal input styles */
+.timeField::-webkit-input-placeholder {
+    color: #9ca3af !important;
+}
+
+.colon {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #9ca3af;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 2rem;
+}
+
+.btnPrimary {
+    flex: 2;
+    background: #000;
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btnSecondary {
+    flex: 1;
+    background: white;
+    border: 2px solid #e5e7eb;
+    padding: 1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* RESULTS & EXPLANATION - Reusing styles for consistency */
+.resultBox {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.resultBox::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #000;
+}
+
+.resultHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.resultHeader span {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.resultTools {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.resultTools button {
+    background: white;
+    border: 1px solid #cbd5e1;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #475569;
+}
+
+.resultMain {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #000;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+.resultSub {
+    font-size: 1.4rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.explanation {
+    margin-top: 1.5rem;
+}
+
+.explanation h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #111;
+}
+
+.explanation ul {
+    list-style: none;
+    padding: 0;
+}
+
+.explanation li {
+    background: white;
+    padding: 0.8rem;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.aiTip {
+    margin-top: 2rem;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #3730a3;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+}
+
+/* SEO Content */
+.seoContent {
+    margin-top: 3rem;
+    color: #4b5563;
+}
+
+.seoContent h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #111;
+}
+
+.faq details {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 0;
+}
+
+.faq summary {
+    font-weight: 600;
+    cursor: pointer;
+    color: #111;
+}

@@ -1,0 +1,177 @@
+/* Standardized Layout */
+.container {
+    padding: 1rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    /* Always single column */
+}
+
+/* Input Styles */
+.inputs {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.inputGroup {
+    margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    transition: all 0.2s;
+}
+
+.inputWrapper:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.inputWrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.125rem;
+    width: 100%;
+    color: #111827;
+    background: transparent;
+}
+
+.inputWrapper span {
+    color: #6b7280;
+    font-weight: 500;
+    padding-right: 8px;
+}
+
+/* Select & Toggles specific to this tool */
+.select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    font-size: 1rem;
+    outline: none;
+    color: #111827;
+}
+
+.select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.tenureWrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tenureWrapper input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    outline: none;
+    color: #111827;
+}
+
+.tenureWrapper input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.toggles {
+    display: flex;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.toggles button {
+    padding: 0 1rem;
+    background: #f9fafb;
+    border: none;
+    border-right: 1px solid #e5e7eb;
+    cursor: pointer;
+    font-weight: 500;
+    color: #6b7280;
+    transition: all 0.2s;
+}
+
+.toggles button:last-child {
+    border-right: none;
+}
+
+.toggles button.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Action Buttons */
+.actionButtons {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.calculateBtn {
+    flex: 2;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.calculateBtn:hover {
+    background: #2563eb;
+}
+
+.resetBtn {
+    flex: 1;
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.resetBtn:hover {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+/* Results - Stacked below */
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import CalculatorLayout from './shared/CalculatorLayout';
+import ToolResult from '@/components/tools/ToolResult';
 
 export default function BMICalculator() {
     const [unit, setUnit] = useState<'metric' | 'imperial'>('metric');
@@ -82,15 +83,18 @@ export default function BMICalculator() {
                 </button>
 
                 {bmi !== null && (
-                    <div style={{ background: '#f0fdf4', padding: '1.5rem', borderRadius: '12px', border: '1px solid #bbf7d0', textAlign: 'center' }}>
-                        <span style={{ color: '#166534', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your BMI</span>
-                        <div style={{ fontSize: '3rem', fontWeight: 800, color: '#15803d', margin: '0.5rem 0' }}>
-                            {bmi}
-                        </div>
-                        <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#14532d' }}>
-                            {status}
-                        </div>
-                    </div>
+                    <ToolResult
+                        title={bmi.toString()}
+                        subTitle={status}
+                        toolName="BMI Calculator"
+                        details={`Category: ${status}`}
+                        explanation={[
+                            `<b>Formula:</b> ${unit === 'metric' ? 'Weight(kg) / Height(m)²' : '703 × Weight(lb) / Height(in)²'}`,
+                            `<b>Your Stats:</b> ${weight} ${unit === 'metric' ? 'kg' : 'lbs'}, ${height} ${unit === 'metric' ? 'cm' : 'inches'}`,
+                            `<b>Result:</b> A BMI of ${bmi} indicates ${status}.`
+                        ]}
+                        aiPrompt={`My BMI is ${bmi} (${status}). I am ${weight}${unit === 'metric' ? 'kg' : 'lbs'} and ${height}${unit === 'metric' ? 'cm' : 'in'}. Give me health advice.`}
+                    />
                 )}
             </div>
         </CalculatorLayout>

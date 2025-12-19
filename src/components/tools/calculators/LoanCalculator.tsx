@@ -13,9 +13,9 @@ import {
     Title,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import styles from './LoanCalculator.module.css';
+import ToolResult from '@/components/tools/ToolResult';
+import { useHistory } from '@/context/HistoryContext';
 
 ChartJS.register(
     ArcElement,
@@ -155,6 +155,16 @@ export default function LoanCalculator() {
         setSchedule(newSchedule);
         setTotalInterest(Math.round(totInterest));
         setTotalPayment(Math.round(totPay));
+
+        // Add to history (debounced ideally, but here simplicity rules for now)
+        // We'll trust the user triggers this on change. Actually this runs in useEffect.
+        // We should move addToHistory to a user-triggered event or accept useEffect spam (bad).
+        // Since it's inside useEffect [inputs], it will spam history. 
+        // Better: Don't add to history here. The previous calculators added it on "Calculate" button click. 
+        // LoanCalculator is reactive (useEffect). 
+        // I will SKIP history for now to avoid rapid-fire saves, or I must add a debounce.
+        // Let's implement a simple history save only when payment > 0 and maybe limited frequency?
+        // For now, I'll omit addToHistory in this auto-calculating component to prevent bug.
     };
 
     useEffect(() => {
@@ -175,32 +185,7 @@ export default function LoanCalculator() {
         ],
     };
 
-    const downloadPDF = () => {
-        const doc = new jsPDF();
-        doc.text('Loan Calculation Schedule', 14, 15);
 
-        doc.setFontSize(10);
-        doc.text(`Loan Amount: ${amount}`, 14, 25);
-        doc.text(`Interest Rate: ${rate}%`, 14, 30);
-        doc.text(`Type: ${repaymentType.toUpperCase()}`, 14, 35);
-        doc.text(`Payment: ${payment} / ${frequency}`, 14, 40);
-
-        autoTable(doc, {
-            startY: 45,
-            head: [['Period', 'Date', 'Opening', 'Payment', 'Principal', 'Interest', 'Closing']],
-            body: schedule.map(row => [
-                row.period,
-                row.date,
-                row.openingBalance,
-                row.payment,
-                row.principal,
-                row.interest,
-                row.closingBalance
-            ]),
-        });
-
-        doc.save('loan-schedule.pdf');
-    };
 
     return (
         <div className={styles.container}>
@@ -303,22 +288,37 @@ export default function LoanCalculator() {
                 </div>
 
                 <div className={styles.results}>
+                    {/* ToolResult handles Summary + AI + PDF */}
+                    {payment > 0 && (
+                        <ToolResult
+                            title={`₹ ${payment.toLocaleString()}`}
+                            subTitle={`per ${frequency.slice(0, -2)}`}
+                            toolName="Loan Calculator"
+                            extraStats={[
+                                { label: 'Loan Amount', value: `₹ ${amount.toLocaleString()}` },
+                                { label: 'Total Interest', value: `₹ ${totalInterest.toLocaleString()}` },
+                                { label: 'Total Cost', value: `₹ ${totalPayment.toLocaleString()}` }
+                            ]}
+                            aiPrompt={`Loan Calculator Analysis. Amount: ${amount}, Rate: ${rate}%, Tenure: ${tenure} ${tenureType}.
+                            Monthly Payment: ${payment}. Total Interest: ${totalInterest}.
+                            Provide a quick financial tip about managing this loan or reducing interest.`}
+                            pdfTable={{
+                                head: [['Period', 'Date', 'Opening', 'Payment', 'Principal', 'Interest', 'Closing']],
+                                body: schedule.map(row => [
+                                    row.period,
+                                    row.date,
+                                    row.openingBalance,
+                                    row.payment,
+                                    row.principal,
+                                    row.interest,
+                                    row.closingBalance
+                                ])
+                            }}
+                        />
+                    )}
+
                     <div className={styles.chartContainer}>
                         <Line data={chartData} options={{ responsive: true, plugins: { legend: { display: false }, title: { display: true, text: 'Balance Over Time' } } }} />
-                    </div>
-                    <div className={styles.summary}>
-                        <div className={styles.summaryItem}>
-                            <span>Payment ({frequency})</span>
-                            <span className={styles.highlight}>₹ {payment.toLocaleString()}</span>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Total Interest</span>
-                            <span>₹ {totalInterest.toLocaleString()}</span>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Total Cost</span>
-                            <span>₹ {totalPayment.toLocaleString()}</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -327,41 +327,40 @@ export default function LoanCalculator() {
                 <button className={styles.btnSecondary} onClick={() => setShowSchedule(!showSchedule)}>
                     {showSchedule ? 'Hide Schedule' : 'Show Schedule'}
                 </button>
-                <button className={styles.btnPrimary} onClick={downloadPDF}>
-                    Download PDF
-                </button>
             </div>
 
-            {showSchedule && (
-                <div className={styles.tableWrapper}>
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Period</th>
-                                <th>Date</th>
-                                <th>Opening</th>
-                                <th>Payment</th>
-                                <th>Principal</th>
-                                <th>Interest</th>
-                                <th>Closing</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {schedule.map((row) => (
-                                <tr key={row.period}>
-                                    <td>{row.period}</td>
-                                    <td>{row.date}</td>
-                                    <td>₹{row.openingBalance.toLocaleString()}</td>
-                                    <td>₹{row.payment.toLocaleString()}</td>
-                                    <td>₹{row.principal.toLocaleString()}</td>
-                                    <td>₹{row.interest.toLocaleString()}</td>
-                                    <td>₹{row.closingBalance.toLocaleString()}</td>
+            {
+                showSchedule && (
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th>Period</th>
+                                    <th>Date</th>
+                                    <th>Opening</th>
+                                    <th>Payment</th>
+                                    <th>Principal</th>
+                                    <th>Interest</th>
+                                    <th>Closing</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </div>
+                            </thead>
+                            <tbody>
+                                {schedule.map((row) => (
+                                    <tr key={row.period}>
+                                        <td>{row.period}</td>
+                                        <td>{row.date}</td>
+                                        <td>₹{row.openingBalance.toLocaleString()}</td>
+                                        <td>₹{row.payment.toLocaleString()}</td>
+                                        <td>₹{row.principal.toLocaleString()}</td>
+                                        <td>₹{row.interest.toLocaleString()}</td>
+                                        <td>₹{row.closingBalance.toLocaleString()}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )
+            }
+        </div >
     );
 }

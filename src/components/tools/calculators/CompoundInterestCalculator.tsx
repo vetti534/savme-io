@@ -11,9 +11,8 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import styles from './CompoundInterestCalculator.module.css';
+import ToolResult from '@/components/tools/ToolResult';
 
 ChartJS.register(
     CategoryScale,
@@ -186,7 +185,7 @@ export default function CompoundInterestCalculator() {
 
     useEffect(() => {
         calculateCI();
-    }, [principal, rate, years, compoundFreq, contribution, contributionFreq]);
+    }, []);
 
     const chartData = {
         labels: chartLabels,
@@ -204,35 +203,6 @@ export default function CompoundInterestCalculator() {
                 stack: 'Stack 0',
             },
         ],
-    };
-
-    const downloadPDF = () => {
-        const doc = new jsPDF();
-        doc.text('Compound Interest Calculation', 14, 15);
-        doc.setFontSize(10);
-        doc.text(`Principal: ₹${principal}`, 14, 25);
-        doc.text(`Rate: ${rate}% (${compoundFreq})`, 14, 30);
-        doc.text(`Tenure: ${years} Years`, 14, 35);
-
-        doc.text(`Maturity Amount: ₹${maturityAmount.toLocaleString()}`, 14, 45);
-        doc.text(`Total Investment: ₹${totalInvested.toLocaleString()}`, 14, 50);
-        doc.text(`Interest Earned: ₹${totalInterest.toLocaleString()}`, 14, 55);
-
-        const tableData = chartLabels.map((label, i) => [
-            label,
-            `Rs. ${chartDataInvested[i].toLocaleString()}`,
-            `Rs. ${chartDataInterest[i].toLocaleString()}`,
-            `Rs. ${(chartDataInvested[i] + chartDataInterest[i]).toLocaleString()}`
-        ]);
-        // Remove "Start" row if wanted, or keep. Table needs headers.
-
-        autoTable(doc, {
-            startY: 65,
-            head: [['Year', 'Invested', 'Interest', 'Total Balance']],
-            body: tableData.slice(1), // Skip "Start" 0th row for cleaner table
-        });
-
-        doc.save('compound-interest.pdf');
     };
 
     return (
@@ -316,21 +286,51 @@ export default function CompoundInterestCalculator() {
                     </div>
                 </div>
 
+                {/* Action Buttons */}
+                <div className={styles.actionButtons}>
+                    <button className={styles.calculateBtn} onClick={calculateCI}>
+                        Calculate
+                    </button>
+                    <button className={styles.resetBtn} onClick={() => {
+                        setPrincipal(10000);
+                        setRate(8);
+                        setYears(5);
+                        setCompoundFreq('annually');
+                        setContribution(0);
+                        setContributionFreq('monthly');
+                        setMaturityAmount(0);
+                        setTotalInterest(0);
+                        setTotalInvested(0);
+                        setChartLabels([]);
+                        setChartDataInvested([]);
+                        setChartDataInterest([]);
+                    }}>
+                        Reset
+                    </button>
+                </div>
+
                 <div className={styles.results}>
-                    <div className={styles.summaryGrid}>
-                        <div className={styles.summaryItem}>
-                            <span>Principal</span>
-                            <h3>₹ {principal.toLocaleString()}</h3>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Total Interest</span>
-                            <h3 style={{ color: '#27ae60' }}>₹ {totalInterest.toLocaleString()}</h3>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Maturity Amount</span>
-                            <h3 className={styles.highlight}>₹ {maturityAmount.toLocaleString()}</h3>
-                        </div>
-                    </div>
+                    <ToolResult
+                        title={`₹ ${maturityAmount.toLocaleString()}`}
+                        subTitle="Maturity Amount"
+                        toolName="Compound Interest Calculator"
+                        extraStats={[
+                            { label: 'Principal', value: `₹ ${principal.toLocaleString()}` },
+                            { label: 'Total Interest', value: `₹ ${totalInterest.toLocaleString()}` },
+                            { label: 'Total Invested', value: `₹ ${totalInvested.toLocaleString()}` },
+                            { label: 'Maturity Value', value: `₹ ${maturityAmount.toLocaleString()}` },
+                        ]}
+                        aiPrompt={`Compound Interest Calculation. Principal: ${principal}, Rate: ${rate}%, Years: ${years}, Freq: ${compoundFreq}. Maturity: ${maturityAmount}, Interest Earned: ${totalInterest}. Explain the power of compounding.`}
+                        pdfTable={{
+                            head: [['Year', 'Invested', 'Interest', 'Total Balance']],
+                            body: chartLabels.map((label, i) => [
+                                label,
+                                `Rs. ${chartDataInvested[i].toLocaleString()}`,
+                                `Rs. ${chartDataInterest[i].toLocaleString()}`,
+                                `Rs. ${(chartDataInvested[i] + chartDataInterest[i]).toLocaleString()}`
+                            ]).slice(1)
+                        }}
+                    />
 
                     <div className={styles.chartWrapper}>
                         <Bar
@@ -345,10 +345,6 @@ export default function CompoundInterestCalculator() {
                             }}
                         />
                     </div>
-
-                    <button className={styles.btnPrimary} onClick={downloadPDF}>
-                        Download Schedule (PDF)
-                    </button>
                 </div>
             </div>
         </div>

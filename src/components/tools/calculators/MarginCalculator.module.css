@@ -1,0 +1,194 @@
+/* GRID LAYOUT - Matches Global Standards */
+.pageGrid {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    /* Reduced sidebar width */
+    gap: 2.5rem;
+    /* Reduced gap */
+    max-width: 1400px;
+    /* Wider container for bigger calculator */
+    margin: 0 auto;
+    padding-bottom: 4rem;
+    padding-top: 80px;
+    /* Header clearance */
+    align-items: start;
+    /* Aligns top of calculator with sidebar */
+}
+
+@media (max-width: 900px) {
+    .pageGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .rightColumn {
+        display: block;
+        /* Show on mobile */
+        margin-top: 3rem;
+    }
+}
+
+.mainColumn {
+    width: 100%;
+}
+
+.rightColumn {
+    min-height: auto;
+    /* Let content dictate height */
+}
+
+.stickyAd {
+    position: sticky;
+    top: 90px;
+    /* Below header */
+}
+
+/* CARDS */
+.card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+/* INPUTS */
+.inputs {
+    background: transparent;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.inputGroup label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.inputWrapper:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.inputWrapper input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    outline: none;
+    color: #000000;
+    /* Pure Black */
+}
+
+.inputWrapper span {
+    color: #4b5563;
+    font-weight: 600;
+}
+
+.slider {
+    width: 100%;
+    margin-top: 1rem;
+    accent-color: #2563eb;
+    cursor: pointer;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 4px;
+}
+
+.presets {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.presets button {
+    border: 1px solid #e5e7eb;
+    background: #f9fafb;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #374151;
+}
+
+.presets button:hover {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+    color: #000;
+}
+
+/* RESULTS */
+.results {
+    margin-top: 2rem;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.btnPrimary {
+    flex: 2;
+    background: #000;
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.btnPrimary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.btnSecondary {
+    flex: 1;
+    background: white;
+    border: 2px solid #e5e7eb;
+    padding: 1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+.btnSecondary:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #000;
+}

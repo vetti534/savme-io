@@ -1,0 +1,51 @@
+.container {
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.inputGroup {
+    margin-bottom: 2rem;
+}
+
+.inputGroup label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.ratioWrapper {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.inputWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #fff;
+    flex: 1;
+}
+
+.inputWrapper input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1.125rem;
+    width: 100%;
+}

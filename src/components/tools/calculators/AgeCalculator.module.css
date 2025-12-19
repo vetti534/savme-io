@@ -1,44 +1,303 @@
-.container {
-    max-width: 500px;
+/* GRID LAYOUT */
+.pageGrid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    /* Main content + 300px Ad Sidebar */
+    gap: 2rem;
+    max-width: 1200px;
     margin: 0 auto;
-    background: var(--card);
+    padding-bottom: 4rem;
+}
+
+@media (max-width: 900px) {
+    .pageGrid {
+        grid-template-columns: 1fr;
+        /* Stack on tablet/mobile */
+    }
+
+    .rightColumn {
+        display: none;
+        /* Hide sidebar ads on small screens if requested, or move below */
+        /* User rule: "Ads must auto-hide on mobile devices" -> OK, hide */
+    }
+}
+
+.mainColumn {
+    width: 100%;
+}
+
+.rightColumn {
+    min-height: 800px;
+}
+
+.stickyAd {
+    position: sticky;
+    top: 20px;
+    min-height: 600px;
+    /* Make the ad container tall */
+}
+
+/* UI ELEMENTS */
+.loading {
+    text-align: center;
     padding: 2rem;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.tab {
+    padding: 0.8rem 1.2rem;
+    border: none;
+    background: #f3f4f6;
+    color: #4b5563;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.activeTab {
+    background: #000;
+    color: white;
+    font-weight: 600;
+}
+
+.card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #111;
+}
+
+.icon {
+    color: #111;
+}
+
+.cardDesc {
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.05rem;
+}
+
+.inputSection {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .inputGroup {
-    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.label {
-    display: block;
+.inputGroup label {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.inputGroup input {
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.2s;
+    color: #000;
+    background-color: #fff;
+}
+
+.inputGroup input:focus {
+    border-color: #000;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 2rem;
+}
+
+.btnPrimary {
+    flex: 2;
+    background: #000;
+    color: white;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.btnSecondary {
+    flex: 1;
+    background: white;
+    border: 2px solid #e5e7eb;
+    padding: 1rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* RESULTS */
+.resultBox {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid #e2e8f0;
+    position: relative;
+    overflow: hidden;
+}
+
+.resultBox::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #000;
+}
+
+.resultHeader {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.resultHeader span {
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.resultTools {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.resultTools button {
+    background: white;
+    border: 1px solid #cbd5e1;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #475569;
+}
+
+.resultMain {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #000;
+    /* Strict Black */
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+}
+
+.resultSub {
+    font-size: 1.4rem;
+    color: #333;
     margin-bottom: 0.5rem;
     font-weight: 500;
 }
 
-.result {
+.resultDetails {
+    color: #666;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.explanation h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+}
+
+.explanation ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5rem;
+}
+
+.explanation li {
+    background: white;
+    padding: 0.8rem;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    color: #334155;
+}
+
+.aiTip {
     margin-top: 2rem;
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    background: var(--muted);
-    padding: 1.5rem;
-    border-radius: var(--radius);
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
+    color: #3730a3;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
-.resultItem {
-    display: flex;
-    flex-direction: column;
+/* SEO */
+.seoContent {
+    margin-top: 3rem;
+    color: #4b5563;
 }
 
-.number {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
+.seoContent h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #111;
 }
 
-.text {
-    color: var(--muted-foreground);
-    font-size: 0.875rem;
+.faq details {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1rem 0;
+}
+
+.faq summary {
+    font-weight: 600;
+    cursor: pointer;
 }

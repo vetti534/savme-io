@@ -1,34 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import {
-    Chart as ChartJS,
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Filler
-} from 'chart.js';
-import { Line, Doughnut } from 'react-chartjs-2';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import styles from './SIPCalculator.module.css';
-
-ChartJS.register(
-    ArcElement,
-    Tooltip,
-    Legend,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Filler
-);
+import ToolResult from '@/components/tools/ToolResult';
+import AdSlot from '@/components/ads/AdSlot';
+import RelatedTools from '@/components/tools/RelatedTools';
 
 interface YearProjection {
     year: number;
@@ -43,10 +19,17 @@ export default function SIPCalculator() {
     const [stepUpRate, setStepUpRate] = useState<number>(0);
     const [inflationRate, setInflationRate] = useState<number>(0);
 
+    // Snapshot of inputs for Display Results (prevents jitter/re-render of results on slider move)
+    const [displayState, setDisplayState] = useState({
+        monthlyInvestment: 5000,
+        expectedReturn: 12,
+        tenureYears: 10,
+        inflationAdjustedValue: 0
+    });
+
     const [investedAmount, setInvestedAmount] = useState<number>(0);
     const [estReturns, setEstReturns] = useState<number>(0);
     const [totalValue, setTotalValue] = useState<number>(0);
-    const [inflationAdjustedValue, setInflationAdjustedValue] = useState<number>(0);
     const [projections, setProjections] = useState<YearProjection[]>([]);
 
     const calculateSIP = () => {
@@ -82,234 +65,294 @@ export default function SIPCalculator() {
             }
         }
 
-        setInvestedAmount(Math.round(totalInvested));
-        setTotalValue(Math.round(currentValue));
-        setEstReturns(Math.round(currentValue - totalInvested));
+        const finalInvested = Math.round(totalInvested);
+        const finalValue = Math.round(currentValue);
+        const finalEstReturns = Math.round(currentValue - totalInvested);
+
+        setInvestedAmount(finalInvested);
+        setTotalValue(finalValue);
+        setEstReturns(finalEstReturns);
         setProjections(yearlyProjections);
 
         // Inflation Adjustment
+        let inflationAdj = 0;
         if (inflationRate > 0) {
             // Real Value = Nominal Value / (1 + inflation)^years
             const realValue = currentValue / Math.pow(1 + inflationRate / 100, tenureYears);
-            setInflationAdjustedValue(Math.round(realValue));
-        } else {
-            setInflationAdjustedValue(0);
+            inflationAdj = Math.round(realValue);
         }
+
+        // Update Display Snapshot
+        setDisplayState({
+            monthlyInvestment,
+            expectedReturn,
+            tenureYears,
+            inflationAdjustedValue: inflationAdj
+        });
     };
 
+    // Auto-calculate on mount only
     useEffect(() => {
         calculateSIP();
-    }, [monthlyInvestment, expectedReturn, tenureYears, stepUpRate, inflationRate]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const doughnutData = {
-        labels: ['Invested Amount', 'Est. Returns'],
-        datasets: [
-            {
-                data: [investedAmount, estReturns],
-                backgroundColor: ['#e0e0e0', '#e53935'],
-                borderWidth: 0,
-            },
-        ],
-    };
-
-    const lineData = {
-        labels: projections.map(p => `Year ${p.year}`),
-        datasets: [
-            {
-                label: 'Total Value',
-                data: projections.map(p => p.value),
-                borderColor: '#e53935',
-                backgroundColor: 'rgba(229, 57, 53, 0.1)',
-                fill: true,
-                tension: 0.4,
-            },
-            {
-                label: 'Invested Amount',
-                data: projections.map(p => p.invested),
-                borderColor: '#555',
-                borderDash: [5, 5],
-                fill: false,
-                tension: 0.4,
-            }
-        ],
-    };
-
-    const downloadPDF = () => {
-        const doc = new jsPDF();
-        doc.text('SIP Investment Projection', 14, 15);
-
-        doc.setFontSize(10);
-        doc.text(`Monthly Investment: ₹${monthlyInvestment}`, 14, 25);
-        doc.text(`Expected Return: ${expectedReturn}%`, 14, 30);
-        doc.text(`Tenure: ${tenureYears} Years`, 14, 35);
-        if (stepUpRate > 0) doc.text(`Annual Step-up: ${stepUpRate}%`, 14, 40);
-
-        doc.text(`Invested Amount: ₹${investedAmount}`, 14, 50);
-        doc.text(`Est. Returns: ₹${estReturns}`, 14, 55);
-        doc.text(`Total Value: ₹${totalValue}`, 14, 60);
-
-        autoTable(doc, {
-            startY: 70,
-            head: [['Year', 'Invested Amount', 'Total Value']],
-            body: projections.map(row => [
-                row.year,
-                row.invested,
-                row.value
-            ]),
+    const handleReset = () => {
+        setMonthlyInvestment(5000);
+        setExpectedReturn(12);
+        setTenureYears(10);
+        setStepUpRate(0);
+        setInflationRate(0);
+        setInvestedAmount(0);
+        setEstReturns(0);
+        setTotalValue(0);
+        setProjections([]);
+        setDisplayState({
+            monthlyInvestment: 5000,
+            expectedReturn: 12,
+            tenureYears: 10,
+            inflationAdjustedValue: 0
         });
-
-        doc.save('sip-projection.pdf');
     };
+
+
 
     return (
-        <div className={styles.container}>
-            <div className={styles.grid}>
-                <div className={styles.inputs}>
-                    <div className={styles.inputGroup}>
-                        <label>Monthly Investment</label>
-                        <div className={styles.inputWrapper}>
-                            <span>₹</span>
+        <div className={styles.pageGrid}>
+            {/* MAIN CONTENT */}
+            <div className={styles.mainColumn}>
+
+                {/* Intro Section */}
+                <div className="mb-4">
+                    <h1 className="text-3xl font-extrabold text-gray-900 mb-3">SIP Calculator</h1>
+                    <p className="text-gray-600 text-lg leading-relaxed">
+                        Use this SIP Calculator to estimate long-term mutual fund returns. Calculate the future value of your monthly SIP investments accurately with our free online tool.
+                    </p>
+                </div>
+
+                <div className={styles.card}>
+                    <div className={styles.inputs}>
+                        <div className={styles.inputGroup}>
+                            <label>Monthly Investment</label>
+                            <div className={styles.inputWrapper}>
+                                <span>₹</span>
+                                <input
+                                    type="number"
+                                    inputMode="numeric"
+                                    value={monthlyInvestment}
+                                    onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 font-medium">Amount invested every month</p>
+                            <div className={styles.presets}>
+                                {[1000, 2000, 5000, 10000].map(val => (
+                                    <button key={val} onClick={() => setMonthlyInvestment(val)}>₹{val / 1000}k</button>
+                                ))}
+                            </div>
                             <input
-                                type="number"
+                                type="range"
+                                min="500"
+                                max="100000"
+                                step="500"
                                 value={monthlyInvestment}
                                 onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
+                                className={styles.slider}
                             />
                         </div>
-                        <div className={styles.presets}>
-                            {[1000, 2000, 5000, 10000].map(val => (
-                                <button key={val} onClick={() => setMonthlyInvestment(val)}>₹{val / 1000}k</button>
-                            ))}
-                        </div>
-                        <input
-                            type="range"
-                            min="500"
-                            max="100000"
-                            step="500"
-                            value={monthlyInvestment}
-                            onChange={(e) => setMonthlyInvestment(Number(e.target.value))}
-                            className={styles.slider}
-                        />
-                    </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Expected Return (p.a)</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={styles.inputGroup}>
+                            <label>Expected Return (p.a)</label>
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    type="number"
+                                    inputMode="decimal"
+                                    value={expectedReturn}
+                                    onChange={(e) => setExpectedReturn(Number(e.target.value))}
+                                />
+                                <span>%</span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 font-medium">Average annual return from mutual funds</p>
+                            <div className={styles.presets}>
+                                {[8, 12, 15, 20].map(val => (
+                                    <button key={val} onClick={() => setExpectedReturn(val)}>{val}%</button>
+                                ))}
+                            </div>
                             <input
-                                type="number"
+                                type="range"
+                                min="1"
+                                max="30"
+                                step="0.1"
                                 value={expectedReturn}
                                 onChange={(e) => setExpectedReturn(Number(e.target.value))}
+                                className={styles.slider}
                             />
-                            <span>%</span>
                         </div>
-                        <div className={styles.presets}>
-                            {[8, 12, 15, 20].map(val => (
-                                <button key={val} onClick={() => setExpectedReturn(val)}>{val}%</button>
-                            ))}
-                        </div>
-                        <input
-                            type="range"
-                            min="1"
-                            max="30"
-                            step="0.1"
-                            value={expectedReturn}
-                            onChange={(e) => setExpectedReturn(Number(e.target.value))}
-                            className={styles.slider}
-                        />
-                    </div>
 
-                    <div className={styles.inputGroup}>
-                        <label>Tenure (Years)</label>
-                        <div className={styles.inputWrapper}>
+                        <div className={styles.inputGroup}>
+                            <label>Tenure (Years)</label>
+                            <div className={styles.inputWrapper}>
+                                <input
+                                    type="number"
+                                    inputMode="numeric"
+                                    value={tenureYears}
+                                    onChange={(e) => setTenureYears(Number(e.target.value))}
+                                />
+                                <span>Yr</span>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-1 font-medium">Total investment period</p>
                             <input
-                                type="number"
+                                type="range"
+                                min="1"
+                                max="40"
+                                step="1"
                                 value={tenureYears}
                                 onChange={(e) => setTenureYears(Number(e.target.value))}
+                                className={styles.slider}
                             />
-                            <span>Yr</span>
                         </div>
-                        <input
-                            type="range"
-                            min="1"
-                            max="40"
-                            step="1"
-                            value={tenureYears}
-                            onChange={(e) => setTenureYears(Number(e.target.value))}
-                            className={styles.slider}
+
+                        <div className={styles.advancedOptions}>
+                            <details className="group">
+                                <summary className="flex items-center cursor-pointer text-blue-600 font-semibold mb-2 list-none">
+                                    <span className="mr-2 group-open:rotate-90 transition-transform">▸</span>
+                                    Advanced: Step-up & Inflation
+                                    <span className="ml-2 text-xs text-gray-400 font-normal opacity-0 group-open:opacity-100 transition-opacity">
+                                        Optional – for advanced planning
+                                    </span>
+                                </summary>
+                                <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 animate-in fade-in slide-in-from-top-1 duration-200">
+                                    <div className={styles.inputGroup}>
+                                        <label>Annual Step-up (%)</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="number"
+                                                inputMode="decimal"
+                                                value={stepUpRate}
+                                                onChange={(e) => setStepUpRate(Number(e.target.value))}
+                                            />
+                                            <span>%</span>
+                                        </div>
+                                        <p className="text-xs text-gray-400 mt-1">Increase investment annually</p>
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label>Inflation Rate (%)</label>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="number"
+                                                inputMode="decimal"
+                                                value={inflationRate}
+                                                onChange={(e) => setInflationRate(Number(e.target.value))}
+                                            />
+                                            <span>%</span>
+                                        </div>
+                                        <p className="text-xs text-gray-400 mt-1">
+                                            Adjust final value for inflation
+                                        </p>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div className={styles.actions}>
+                            <button className={styles.btnPrimary} onClick={calculateSIP}>
+                                Calculate
+                            </button>
+                            <button className={styles.btnSecondary} onClick={handleReset}>
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={styles.results}>
+                        <ToolResult
+                            title={`₹ ${totalValue.toLocaleString()}`}
+                            subTitle={`Wealth Gained: ₹ ${estReturns.toLocaleString()}`}
+                            toolName="SIP Calculator"
+                            actionsPosition="bottom"
+                            extraStats={[
+                                { label: 'Invested Amount', value: `₹ ${investedAmount.toLocaleString()}` },
+                                { label: 'Est. Returns', value: `₹ ${estReturns.toLocaleString()}` },
+                                { label: 'Total Value', value: `₹ ${totalValue.toLocaleString()}` }
+                            ]}
+                            aiPrompt={`SIP Calculator Analysis. Monthly: ${displayState.monthlyInvestment}, Rate: ${displayState.expectedReturn}%, Tenure: ${displayState.tenureYears} years.
+                            Total Value: ${totalValue}. Invested: ${investedAmount}. Returns: ${estReturns}.
+                            Inflation Adjusted: ${displayState.inflationAdjustedValue}.
+                            Give me investment advice based on these numbers.`}
+                            explanation={[
+                                `<strong>Monthly Investment:</strong> You invest <strong>₹${displayState.monthlyInvestment.toLocaleString()}</strong> every month for <strong>${displayState.tenureYears} years</strong>.`,
+                                `<strong>Total Investment:</strong> Over ${displayState.tenureYears} years, your total deposited amount will be <strong>₹${investedAmount.toLocaleString()}</strong>.`,
+                                `<strong>Power of Compounding:</strong> At an expected return of <strong>${displayState.expectedReturn}%</strong>, your money grows exponentially.`,
+                                `<strong>Final Value:</strong> Your estimated maturity amount calculates to <strong>₹${totalValue.toLocaleString()}</strong>.`
+                            ]}
+                            pdfTable={{
+                                head: [['Year', 'Invested Amount', 'Total Value']],
+                                body: projections.map(row => [
+                                    row.year,
+                                    row.invested,
+                                    row.value
+                                ])
+                            }}
                         />
                     </div>
+                </div>
 
-                    <div className={styles.advancedOptions}>
-                        <details>
-                            <summary>Advanced Options (Step-up, Inflation)</summary>
-                            <div className={styles.inputGroup} style={{ marginTop: '1rem' }}>
-                                <label>Annual Step-up (%)</label>
-                                <div className={styles.inputWrapper}>
-                                    <input
-                                        type="number"
-                                        value={stepUpRate}
-                                        onChange={(e) => setStepUpRate(Number(e.target.value))}
-                                    />
-                                    <span>%</span>
-                                </div>
-                            </div>
-                            <div className={styles.inputGroup}>
-                                <label>Inflation Rate (%)</label>
-                                <div className={styles.inputWrapper}>
-                                    <input
-                                        type="number"
-                                        value={inflationRate}
-                                        onChange={(e) => setInflationRate(Number(e.target.value))}
-                                    />
-                                    <span>%</span>
-                                </div>
-                                <p style={{ fontSize: '0.8rem', color: '#666', marginTop: '0.2rem' }}>
-                                    Used to calculate inflation-adjusted value.
-                                </p>
-                            </div>
-                        </details>
+                {/* FAQ Section */}
+                <div className="mt-12 bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
+                    <div className="space-y-6">
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">What is SIP?</h4>
+                            <p className="text-gray-600 leading-relaxed">
+                                A Systematic Investment Plan (SIP) is a way to invest money in mutual funds. consistency is key – you invest a fixed amount every month, which helps in disciplined wealth creation over time.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">How is SIP return calculated?</h4>
+                            <p className="text-gray-600 leading-relaxed">
+                                SIP returns are calculated using the Compound Annual Growth Rate (CAGR) method. However, for monthly deposits, the specific formula used is complex, taking into account the time value of each installment.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">Is this calculator accurate?</h4>
+                            <p className="text-gray-600 leading-relaxed">
+                                Yes, this calculator uses standard financial formulas to estimate returns. However, actual market returns vary and mutual fund performance is subject to market risks.
+                            </p>
+                        </div>
+                        <div>
+                            <h4 className="font-bold text-gray-900 mb-2">How much should I invest in SIP?</h4>
+                            <p className="text-gray-600 leading-relaxed">
+                                Financial advisors often recommend the 50-30-20 rule: 50% for needs, 30% for wants, and 20% for savings/investments. You can start with as low as ₹500/month.
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <div className={styles.results}>
-                    <div className={styles.summaryGrid}>
-                        <div className={styles.summaryItem}>
-                            <span>Invested Amount</span>
-                            <h3>₹ {investedAmount.toLocaleString()}</h3>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Est. Returns</span>
-                            <h3 style={{ color: '#27ae60' }}>₹ {estReturns.toLocaleString()}</h3>
-                        </div>
-                        <div className={styles.summaryItem}>
-                            <span>Total Value</span>
-                            <h3 className={styles.highlight}>₹ {totalValue.toLocaleString()}</h3>
-                        </div>
-                    </div>
-
-                    <div className={styles.chartWrapper}>
-                        <Doughnut data={doughnutData} options={{ maintainAspectRatio: false }} />
-                    </div>
-
-                    {inflationAdjustedValue > 0 && (
-                        <div className={styles.inflationBox}>
-                            <span>Inflation Adjusted Value: </span>
-                            <strong>₹ {inflationAdjustedValue.toLocaleString()}</strong>
-                        </div>
-                    )}
-                </div>
             </div>
 
-            <div className={styles.projectionSection}>
-                <h3>Growth Projection</h3>
-                <div className={styles.lineChart}>
-                    <Line data={lineData} options={{ responsive: true, maintainAspectRatio: false }} />
-                </div>
-            </div>
+            {/* SIDEBAR */}
+            <div className={styles.rightColumn}>
+                <div className={styles.stickyAd}>
+                    {/* Ad Placeholder - Hidden on mobile, visible on desktop */}
+                    <div className="hidden md:block mb-8">
+                        <AdSlot label="Advertisement" className="min-h-[250px]" variant="clean" />
+                    </div>
 
-            <div className={styles.actions}>
-                <button className={styles.btnPrimary} onClick={downloadPDF}>
-                    Download Report
-                </button>
+                    {/* Specific Tools */}
+                    <RelatedTools
+                        currentToolSlug="sip-calculator"
+                        variant="card"
+                        toolSlugs={[
+                            'emi-calculator',
+                            'loan-calculator',
+                            'simple-interest-calculator',
+                            'compound-interest-calculator',
+                            'fd-calculator',
+                            'rd-calculator',
+                            'mortgage-calculator',
+                            'rent-vs-buy-calculator'
+                        ]}
+                    />
+                </div>
             </div>
         </div>
     );
