@@ -36,9 +36,9 @@ export default async function CategoryPage({ params }: Props) {
     let categoryTools = tools.filter((t) => t.category === categoryId);
 
     // If viewing Student Tools, also include the favorite generic tools
-    if (categoryId === 'student-tools') {
+    if (categoryId === 'student-exam' || categoryId === 'student-tools') {
         const favoriteTools = tools.filter(t => STUDENT_FAVORITE_IDS.includes(t.id));
-        // Merge and deduplicate (though unlikely to have duplicates between explicit category and favorites list)
+        // Merge and deduplicate
         categoryTools = [...categoryTools, ...favoriteTools];
     }
 

@@ -67,6 +67,8 @@ export default function Header() {
                 <DropdownItem href="/categories/time-date">Time & Date</DropdownItem>
                 <DropdownItem href="/categories/health-body">Health & Fitness</DropdownItem>
                 <DropdownItem href="/categories/student-exam">Student / Exam</DropdownItem>
+                <DropdownItem href="/categories/text-tools">Text Tools</DropdownItem>
+                <DropdownItem href="/categories/business-tools">Business Tools</DropdownItem>
                 <DropdownItem href="/categories/utility">Utility Tools</DropdownItem>
                 <div className="h-px bg-gray-100 my-1"></div>
                 <DropdownItem href="/all-tools" className="text-red-600 font-semibold">All Tools (View All)</DropdownItem>
