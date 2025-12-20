@@ -54,7 +54,7 @@ export default function AgeCalculator() {
 
     const calculate = () => {
         setExplanation([]);
-        setAiTip('');
+
         setResult(null);
         let steps: string[] = [];
         let res: any = {};
