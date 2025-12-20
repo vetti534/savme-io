@@ -38,4 +38,4 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y lftp
-          lftp -c "set ftp:ssl-force true; set ssl:verify-certificate no; open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }}; mirror -R -v -P 30 --exclude-glob .git* --exclude-glob .github* ./out/ domains/savme.io/public_html"
+          lftp -c "set ftp:ssl-force true; set ssl:verify-certificate no; open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }}; cd out; mirror -R -v -P 30 --exclude-glob .git* --exclude-glob .github* . domains/savme.io/public_html"
