@@ -34,11 +34,15 @@ $toolName = $input['toolName'] ?? 'Unknown Tool';
 $inputData = $input['inputData'] ?? [];
 $resultData = $input['resultData'] ?? [];
 $promptType = $input['promptType'] ?? 'advice';
+$customPrompt = $input['customPrompt'] ?? null;
 
 // Construct Prompt (Matching the Node.js logic)
 $promptText = "";
 
-if ($promptType === 'advice') {
+if ($customPrompt) {
+    // Direct prompt passthrough (used by strict tool prompts)
+    $promptText = $customPrompt;
+} else if ($promptType === 'advice') {
     $promptText = "
         You are an expert consultant for the tool: {$toolName}.
         The user has input the following data: " . json_encode($inputData) . ".

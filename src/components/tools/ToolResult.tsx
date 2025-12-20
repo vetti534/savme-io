@@ -179,7 +179,7 @@ export default function ToolResult({
         if (!aiPrompt) return;
         setLoadingAi(true);
         try {
-            const tip = await generateToolInsight(aiPrompt);
+            const tip = await generateToolInsight(aiPrompt, toolName);
             setAiTip(tip);
         } catch (error) {
             setAiTip("Could not fetch AI insight. Please try again.");
